@@ -110,6 +110,54 @@ class PostsTest extends TestCase
         $response->assertJsonCount(2);
     }
 
+    public function test_show()
+    {
+        Category::create([
+            'name' => 'category 1',
+        ]);
+        Category::create([
+            'name' => 'category 2',
+        ]);
+        Post::create([
+            'user_id' => 1,
+            'category_id' => 1,
+            'title' => 'title 1',
+            'content' => 'content 1',
+        ]);
+        Post::create([
+            'user_id' => 1,
+            'category_id' => 2,
+            'title' => 'title 2',
+            'content' => 'content 2',
+        ]);
+
+        $response = $this->get('/api/posts/1', [
+            'Authorization' => 'Bearer ' . $this->accessToken
+        ]);
+
+        dd($response->decodeResponseJson());
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonStructure(
+            [
+                "id",
+                "user_id",
+                "category_id",
+                "title",
+                "content",
+                "user" => [
+                    "id",
+                    "name",
+                    "email",
+                    "role",
+                    "avatar",
+                ],
+                "category" => [
+                    "id",
+                    "name",
+                ]
+            ]
+        );
+    }
     public function test_store()
     {
         $data = [
@@ -137,23 +185,6 @@ class PostsTest extends TestCase
         );
     }
 
-    public function test_show()
-    {
-        $response = $this->get('/api/users/1', [
-            'Authorization' => 'Bearer ' . $this->accessToken
-        ]);
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonStructure(
-            [
-                'id',
-                'name',
-                'email',
-                'role',
-                'avatar',
-            ]
-        );
-    }
 
     public function test_update()
     {
