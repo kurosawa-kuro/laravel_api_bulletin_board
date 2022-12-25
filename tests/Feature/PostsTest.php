@@ -135,7 +135,7 @@ class PostsTest extends TestCase
             'Authorization' => 'Bearer ' . $this->accessToken
         ]);
 
-        dd($response->decodeResponseJson());
+//        dd($response->decodeResponseJson());
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure(
             [
