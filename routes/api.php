@@ -48,6 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
 
+    Route::apiResource('posts', \App\Http\Controllers\PostController::class);
+
 //    Route::post('upload', [ImageController::class, 'upload']);
 });
 

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
@@ -15,7 +18,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::with('category')->get();
+
+        return response($posts, Response::HTTP_OK);
     }
 
     /**
