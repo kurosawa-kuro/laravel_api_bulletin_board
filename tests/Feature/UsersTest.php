@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
+use function MongoDB\BSON\toJSON;
 
 
 class UsersTest extends TestCase
@@ -65,9 +68,41 @@ class UsersTest extends TestCase
             'password' => Hash::make('sample123'),
         ]);
 
+        Category::create([
+            'name' => 'category 1',
+        ]);
+
+        Category::create([
+            'name' => 'category 2',
+        ]);
+
+
+        Post::create([
+            'user_id' => 1,
+            'category_id' => 2,
+            'title' => 'title 1',
+            'content' => 'content 1',
+        ]);
+
+        Post::create([
+            'user_id' => 1,
+            'category_id' => 1,
+            'title' => 'title 2',
+            'content' => 'content 2',
+        ]);
+
+        Post::create([
+            'user_id' => 2,
+            'category_id' => 2,
+            'title' => 'title 3',
+            'content' => 'content 3',
+        ]);
+
         $response = $this->get('/api/users', [
             'Authorization' => 'Bearer ' . $this->accessToken
         ]);
+
+//        dd($response->decodeResponseJson());
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure(
@@ -78,6 +113,15 @@ class UsersTest extends TestCase
                     'email',
                     'role',
                     'avatar',
+                    'posts' => [
+                        '*' => [
+                            'id',
+                            'user_id',
+                            'category_id',
+                            'title',
+                            'content',
+                        ]
+                    ]
                 ],
             ]
         );
@@ -140,7 +184,7 @@ class UsersTest extends TestCase
             'avatar' => 'https://i.pravatar.cc/300',
         ];
 
-        $response = $this->put('/api/users/1',$data, [
+        $response = $this->put('/api/users/1', $data, [
             'Authorization' => 'Bearer ' . $this->accessToken
         ]);
 

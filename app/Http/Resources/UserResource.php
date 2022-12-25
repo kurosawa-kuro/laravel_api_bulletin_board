@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role' => $this->role,
             'avatar' => $this->avatar,
+            'posts' => PostResource::collection($this->whenLoaded('posts')),
         ];
     }
 }

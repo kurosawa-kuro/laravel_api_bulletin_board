@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,8 +20,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get();
-
+        $users = User::with('posts')->get();
+//dd($users);
 //        return response($users, Response::HTTP_OK);
         return response(UserResource::collection($users), Response::HTTP_OK);
     }
