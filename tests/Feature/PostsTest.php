@@ -93,6 +93,13 @@ class PostsTest extends TestCase
                     "category_id",
                     "title",
                     "content",
+                    "user" => [
+                        "id",
+                        "name",
+                        "email",
+                        "role",
+                        "avatar",
+                    ],
                     "category" => [
                         "id",
                         "name",

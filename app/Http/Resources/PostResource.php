@@ -20,6 +20,7 @@ class PostResource extends JsonResource
             "category_id" => $this->category_id,
             "title" => $this->title,
             "content" => $this->content,
+            'user' => new UserResource($this->whenLoaded('user')),
             'category' => new CategoryResource($this->whenLoaded('category')),
         ];
     }
