@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
@@ -20,7 +21,7 @@ class PostController extends Controller
     {
         $posts = Post::with('category')->get();
 
-        return response($posts, Response::HTTP_OK);
+        return response(PostResource::collection($posts), Response::HTTP_OK);
     }
 
     /**

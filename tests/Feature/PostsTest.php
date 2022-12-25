@@ -63,7 +63,6 @@ class PostsTest extends TestCase
         Category::create([
             'name' => 'category 1',
         ]);
-
         Category::create([
             'name' => 'category 2',
         ]);
@@ -84,21 +83,24 @@ class PostsTest extends TestCase
             'Authorization' => 'Bearer ' . $this->accessToken
         ]);
 
-        dd($response->decodeResponseJson());
-//        $this ->ddResponse($response);
+//        dd($response->decodeResponseJson());
         $response->assertStatus(Response::HTTP_OK);
-//        $response->assertJsonStructure(
-//            [
-//                '*' => [
-//                    'id',
-//                    'name',
-//                    'email',
-//                    'role',
-//                    'avatar',
-//                ],
-//            ]
-//        );
-//        $response->assertJsonCount(2);
+        $response->assertJsonStructure(
+            [
+                '*' => [
+                    "id",
+                    "user_id",
+                    "category_id",
+                    "title",
+                    "content",
+                    "category" => [
+                        "id",
+                        "name",
+                    ]
+                ],
+            ]
+        );
+        $response->assertJsonCount(2);
     }
 
     public function test_store()
@@ -157,7 +159,7 @@ class PostsTest extends TestCase
             'avatar' => 'https://i.pravatar.cc/300',
         ];
 
-        $response = $this->put('/api/users/1',$data, [
+        $response = $this->put('/api/users/1', $data, [
             'Authorization' => 'Bearer ' . $this->accessToken
         ]);
 
